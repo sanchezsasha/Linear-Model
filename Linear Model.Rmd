@@ -1,0 +1,132 @@
+---
+title: "Linear Model"
+author: "Sasha Sanchez"
+date: "7/12/2021"
+output: 
+  html_document:
+    toc: true
+
+  toc_depth: 4 
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+library(tigerstats)
+library(tidyverse)
+data <- read.csv(file="https://onlinestatbook.com/case_studies_rvls/physical_strength/data.txt",sep="",header=TRUE) 
+```
+
+
+## Introduction
+
+Read about the data from the website where it is staged. Then form three regressions models; Model one is SIMS~ARM, model two is SIMS~GRIP, and model three SIMS~ARM~GRIP. For each model find a 95% prediction interval of SIMS given a value of 94. Comparing the models and write down the documentations, then we are going to push the assignment and submit it to the appropriate assignment folder. 
+
+# SIMS~ARM 
+
+
+
+### Graphical Descriptive Results 
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+###Plot scatterplot
+
+```{r}
+plot(SIMS~ARM,data=data)
+```
+
+##Now with ggplot - first select the basic data
+
+```{r}
+basicNN <- ggplot(data,aes(y=SIMS,x=ARM))
+```
+#### Basic scatterplot
+
+```{r}
+basicNN + geom_point()
+```
+
+
+
+The y-axis is SIMS and the x-axis is ARM. In this plot it is showing us a positive linear correlation. There is a positive correlation between ARM AND SIMS in this plot above.  
+
+### Numerical results
+
+```{r}
+cor(SIMS~ARM,data=data)
+```
+
+The value is 0.68 indicating that it is a positive number which will make the line go up towards the right. 
+
+### Inferential  (Build linear model)
+  
+```{r}
+model.1 <- lm(SIMS~ARM,data=data)
+summary.lm(model.1)
+```
+
+If you go 1.226 up or down that is the prediction interval 
+
+
+
+In this linear regression model the equation for the line that fits this will be SIMS which will equal to -4.1 +.05 x ARM. The formula that we're using is, y = m x + b. The "b" is the minus 4.09, the "m" is the number .054563, and the "x" what we are multiplying is ARM and lastly the "y" is the SIMS. This formula helps us create a line. The adjusted R-squared is the number to look at. The bigger the R-squared the better model. 
+
+
+#### Now add the model fit to our plot (Blue Line)
+  
+```{r}
+basicNN + geom_point( ) + geom_smooth(method=lm)
+``` 
+
+It looks like the value of the v- intercept would be 1. Every point in the plot is an error. The points can take the distance between each point and square it. The sum of all squared errors is the average mean error. Take the value of the average away from every dot and then add that up. By looking at this plot this is how we are coming up with the problem. 
+
+```{r}
+newdata = data.frame(GRIP= 94, ARM = 88)
+predict(model.1, newdata, interval = "prediction")
+```
+
+
+This is a prediction interval. How far does one point vary from the other if you take .7 away from 3.13, you would end up with something close as 2.3
+
+# Numerical results
+
+```{r}
+cor(SIMS~GRIP,data=data)
+```
+
+The correlation is 0.63 the higher the correlation the better. This correlation is smaller than the previous correlation.  
+
+
+```{r}
+model.2 <- lm(SIMS~GRIP,data=data)
+summary.lm(model.1)
+```
+
+The adjusted R squared is 0.467.
+
+
+```{r}
+basicNN <- ggplot(data,aes(y=SIMS,x=GRIP))
+```
+##Now add in scatterplot
+
+
+# SIMS~GRIP
+
+```{r}
+plot(SIMS~GRIP,data=data)
+```
+
+
+```{r}
+basicNN + geom_point( ) + geom_smooth(method=lm)
+``` 
+
+
